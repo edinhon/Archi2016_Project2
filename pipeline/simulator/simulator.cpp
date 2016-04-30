@@ -56,20 +56,20 @@ void simulator::runPipeline(){
 		iib.getFromIFStage(ifs);
 		ifs.readInstruction(&PC, inst.I_memory[], ids);
 		
-		if(reg.error != 0){
-			if(reg.error[0]){
-				reg.error[0] = false;
+		if(exs.error != 0){
+			if(exs.error[0]){
+				exs.error[0] = false;
 				fprintf(dump,  "In cycle %d: Write $0 Error\n", i);
-			}if(reg.error[1]){
+			}if(exs.error[1]){
 				reg.error[1] = false;
 				fprintf(dump, "In cycle %d: Number Overflow\n", i);
-			}if(reg.error[2]){
+			}if(exs.error[2]){
 				fprintf(dump, "In cycle %d: Address Overflow\n", i);
-			}if(reg.error[3]){
+			}if(exs.error[3]){
 				fprintf(dump, "In cycle %d: Misalignment Error\n", i);
 			}
 		}
-		if(inst.op != 0x3F && !reg.error[2] && !reg.error[3]){
+		if( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3]){
 			fprintf(snap, "cycle %d\n", i);
 			reg.printRegister(snap);
 			fprintf(snap, "PC: 0x%0.8X\n\n\n", PC*4);
