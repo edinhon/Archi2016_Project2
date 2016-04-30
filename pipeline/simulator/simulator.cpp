@@ -47,14 +47,14 @@ void simulator::runPipeline(){
 	while( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3]){
 		
 		wbs.writeToRegister(dwb, reg.Register[]);
-		dwb.getFromDMStage(dms);
 		dms.writeToData(edb, memo.D_memory);
-		edb.getFromEXStage(exs);
+		dwb.getFromDMStage(dms);
 		exs.implement(ieb, edb);
-		ieb.getFromIDStage(ids);
+		edb.getFromEXStage(exs);
 		ids.decode(reg.Register[], iib, edb);
-		iib.getFromIFStage(ifs);
+		ieb.getFromIDStage(ids);
 		ifs.readInstruction(&PC, inst.I_memory[], ids);
+		iib.getFromIFStage(ifs);
 		
 		if(exs.error != 0){
 			if(exs.error[0]){
