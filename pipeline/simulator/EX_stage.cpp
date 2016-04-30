@@ -2,9 +2,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include "ID&EX_buffer.h"
+#include "EX&DM_buffer.h"
 #include "EX_stage.h"
 
-void EX_stage::implement(ID&EX_buffer ieb){
+void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 	this.PC = ieb.PC;
 	this.op = ieb.op;
 	Reg_value = 0;
@@ -19,51 +20,138 @@ void EX_stage::implement(ID&EX_buffer ieb){
 		if(ieb.op == 0x00){
 			//add
 			if(ieb.funct == 0x20){
-				add(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					add(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					add(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					add(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//addu
 			else if(ieb.funct == 0x21){
-				addu(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					addu(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					addu(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					addu(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//sub
 			else if(ieb.funct == 0x22){
-				sub(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					sub(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					sub(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					sub(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//and
 			else if(ieb.funct == 0x24){
-				andf(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					andf(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					andf(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					andf(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//or
 			else if(ieb.funct == 0x25){
-				orf(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					orf(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					orf(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					orf(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//xor
 			else if(ieb.funct == 0x26){
-				xorf(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					xorf(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					xorf(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					xorf(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//nor
 			else if(ieb.funct == 0x27){
-				nor(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					nor(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					nor(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					nor(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//nand
 			else if(ieb.funct == 0x28){
-				nand(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					nand(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					nand(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					nand(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//slt
 			else if(ieb.funct == 0x2A){
-				slt(ieb.Rs, ieb.Rt, ieb.rd);
+				if(ieb.rs == edb.Reg_address) {
+					slt(edb.Reg_value, ieb.Rt, ieb.rd);
+				}
+				else if(ieb.rt == edb.Reg_address) {
+					slt(ieb.Rs, edb.Reg_value, ieb.rd);
+				}
+				else {
+					slt(ieb.Rs, ieb.Rt, ieb.rd);
+				}
 			}
 			//sll
 			else if(ieb.funct == 0x00){
-				sll(ieb.Rt, ieb.rd, ieb.shamt, ieb.rt);
+				if(ieb.rt == edb.Reg_address) {
+					sll(edb.Reg_value, ieb.rd, ieb.shamt, ieb.rt);
+				}
+				else {
+					sll(ieb.Rt, ieb.rd, ieb.shamt, ieb.rt);
+				}
 			}
 			//srl
 			else if(ieb.funct == 0x02){
-				srl(ieb.Rt, ieb.rd, ieb.shamt);
+				if(ieb.rt == edb.Reg_address) {
+					srl(edb.Reg_value, ieb.rd, ieb.shamt);
+				}
+				else {
+					srl(ieb.Rt, ieb.rd, ieb.shamt);
+				}
 			}
 			//sra
 			else if(ieb.funct == 0x03){
-				sra(ieb.Rt, ieb.rd, ieb.shamt);
+				if(ieb.rt == edb.Reg_address) {
+					sra(edb.Reg_value, ieb.rd, ieb.shamt);
+				}
+				else {
+					sra(ieb.Rt, ieb.rd, ieb.shamt);
+				}
 			}
 		}
 		//J-TYPE
@@ -75,43 +163,102 @@ void EX_stage::implement(ID&EX_buffer ieb){
 		else{
 			//addi
 			if(ieb.op == 0x08){
-				addi(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					addi(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					addi(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//addiu
 			else if(ieb.op == 0x09){
-				addiu(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					addiu(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					addiu(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//lw
 			else if(ieb.op == 0x23){
-				lw(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					lw(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					lw(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//lh
 			else if(ieb.op == 0x21){
-				lh(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					lh(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					lh(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//lhu
 			else if(ieb.op == 0x25){
-				lhu(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					lhu(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					lhu(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//lb
 			else if(ieb.op == 0x20){
-				lb(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					lb(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					lb(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//lbu
 			else if(ieb.op == 0x24){
-				lbu(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					lbu(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					lbu(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//sw
 			else if(ieb.op == 0x2B){
-				sw(ieb.Rs, ieb.Rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					sw(edb.Reg_value, ieb.Rt, ieb.immediate);
+				}
+				else if(ieb.rt == edb.Reg_address){
+					sw(ieb.Rs, edb.Reg_value, ieb.immediate);
+				}
+				else{
+					sw(ieb.Rs, ieb.Rt, ieb.immediate);
+				}
 			}
 			//sh
 			else if(ieb.op == 0x29){
-				sh(ieb.Rs, ieb.Rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					sh(edb.Reg_value, ieb.Rt, ieb.immediate);
+				}
+				else if(ieb.rt == edb.Reg_address){
+					sh(ieb.Rs, edb.Reg_value, ieb.immediate);
+				}
+				else{
+					sh(ieb.Rs, ieb.Rt, ieb.immediate);
+				}
 			}
 			//sb
 			else if(ieb.op == 0x28){
-				sb(ieb.Rs, ieb.Rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					sb(edb.Reg_value, ieb.Rt, ieb.immediate);
+				}
+				else if(ieb.rt == edb.Reg_address){
+					sb(ieb.Rs, edb.Reg_value, ieb.immediate);
+				}
+				else{
+					sb(ieb.Rs, ieb.Rt, ieb.immediate);
+				}
 			}
 			//lui
 			else if(ieb.op == 0x0F){
@@ -119,19 +266,39 @@ void EX_stage::implement(ID&EX_buffer ieb){
 			}
 			//andi
 			else if(ieb.op == 0x0C){
-				andi(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					andi(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					andi(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//ori
 			else if(ieb.op == 0x0D){
-				ori(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					ori(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					ori(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//nori
 			else if(ieb.op == 0x0E){
-				nori(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					nori(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					nori(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			//slti
 			else if(ieb.op == 0x0A){
-				slti(ieb.Rs, ieb.rt, ieb.immediate);
+				if(ieb.rs == edb.Reg_address){
+					slti(edb.Reg_value, ieb.rt, ieb.immediate);
+				}
+				else{
+					slti(ieb.Rs, ieb.rt, ieb.immediate);
+				}
 			}
 			/*//beq
 			else if(ieb.op == 0x04){

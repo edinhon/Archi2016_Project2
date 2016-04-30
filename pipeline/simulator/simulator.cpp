@@ -50,9 +50,9 @@ void simulator::runPipeline(){
 		dwb.getFromDMStage(dms);
 		dms.writeToData(edb, memo.D_memory);
 		edb.getFromEXStage(exs);
-		exs.implement(ieb);
+		exs.implement(ieb, edb);
 		ieb.getFromIDStage(ids);
-		ids.decode(reg.Register[], iib);
+		ids.decode(reg.Register[], iib, edb);
 		iib.getFromIFStage(ifs);
 		ifs.readInstruction(&PC, inst.I_memory[], ids);
 		
@@ -60,13 +60,14 @@ void simulator::runPipeline(){
 			if(exs.error[0]){
 				exs.error[0] = false;
 				fprintf(dump,  "In cycle %d: Write $0 Error\n", i);
-			}if(exs.error[1]){
-				reg.error[1] = false;
-				fprintf(dump, "In cycle %d: Number Overflow\n", i);
-			}if(exs.error[2]){
+			}
+			if(exs.error[2]){
 				fprintf(dump, "In cycle %d: Address Overflow\n", i);
 			}if(exs.error[3]){
 				fprintf(dump, "In cycle %d: Misalignment Error\n", i);
+			}if(exs.error[1]){
+				exs.error[1] = false;
+				fprintf(dump, "In cycle %d: Number Overflow\n", i);
 			}
 		}
 		if( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3]){

@@ -5,6 +5,7 @@
 #include<cstdio>
 #include<cstdlib>
 #include "IF&ID_buffer.h"
+#include "EX&DM_buffer.h"
 
 class ID_stage{
 
@@ -12,7 +13,7 @@ public:
 
     ID_stage();
 	
-	void decode(int Register[], IF&ID_buffer iib);
+	void decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb);
 
 	unsigned int op, rs, rt, rd, shamt, funct, address;
 	int immediate;

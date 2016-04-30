@@ -5,12 +5,13 @@
 #include<cstdio>
 #include<cstdlib>
 #include "ID&EX_buffer.h"
+#include "EX&DM_buffer.h"
 
 class EX_stage{
 
 public:
 	
-	void implement(ID&EX_buffer ieb);
+	void implement(ID&EX_buffer ieb, EX&DM_buffer edb);
 	
 	//R-TYPE
     void add (unsigned int Rs, unsigned int Rt, unsigned int rd);

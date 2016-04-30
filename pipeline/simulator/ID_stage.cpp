@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "ID_stage.h"
+#include "EX&DM_buffer.h"
 
 ID_stage::ID_stage(){
 	op = 0;
@@ -18,7 +19,7 @@ ID_stage::ID_stage(){
 	isBranch = false;
 }
 
-void ID_stage::decode(int Register[], IF&ID_buffer iib){
+void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 	this.PC = iib.PC;
 	isBranch = false;
 	
@@ -32,10 +33,8 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib){
 		if(op == 0x00){
 			rs = (instruction << 6);
 			rs = (rs >> 27);
-			Rs = Register[rs];
 			rt = (instruction << 11);
 			rt = (rt >> 27);
-			Rt = Register[rt];
 			rd = (instruction << 16);
 			rd = (rd >> 27);
 			Rd = Register[rd];
@@ -43,6 +42,12 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib){
 			shamt = (shamt >> 27);
 			funct = (instruction << 26);
 			funct = (funct >> 26);
+			
+			if(rs == edb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03) Rs = edb.Reg_value;
+			else Rs = Register[rs];
+			if(rt == edb.Reg_address && funct != 0x08) Rt = edb.Reg_value;
+			else Rt = Register[rt];
+			
 			//printf("%X %X %X %X %X\n", rs, rt, rd, shamt, funct);
 			//jr
 			if(funct == 0x08){
@@ -75,12 +80,16 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib){
 		else{
 			rs = (instruction << 6);
 			rs = (rs >> 27);
-			Rs = Register[rs];
 			rt = (instruction << 11);
 			rt = (rt >> 27);
-			Rt = Register[rt];
 			immediate = (instruction << 16);
 			immediate = (immediate >> 16);
+			
+			if(rs == edb.Reg_address && op != 0x0F) Rs = edb.Reg_value;
+			else Rs = Register[rs];
+			if(rt == edb.Reg_address && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05) Rt = edb.Reg_value;
+			else Rt = Register[rt];
+			
 			//beq
 			if(op == 0x04){
 				if(Rs == Rt) PC += (1 + immediate);
