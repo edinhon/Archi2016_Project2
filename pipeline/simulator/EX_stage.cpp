@@ -14,6 +14,8 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 	Data_address = 0;
 	isNOP = ieb.isNOP;
 	isHalt = ieb.isHalt;
+	isrsForwarding = false;
+	isrtForwarding = false;
 	
 	if(!isNOP && !isHalt){
 		//R-TYPE
@@ -22,9 +24,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			if(ieb.funct == 0x20){
 				if(ieb.rs == edb.Reg_address) {
 					add(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					add(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					add(ieb.Rs, ieb.Rt, ieb.rd);
@@ -34,9 +38,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x21){
 				if(ieb.rs == edb.Reg_address) {
 					addu(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					addu(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					addu(ieb.Rs, ieb.Rt, ieb.rd);
@@ -46,9 +52,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x22){
 				if(ieb.rs == edb.Reg_address) {
 					sub(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					sub(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					sub(ieb.Rs, ieb.Rt, ieb.rd);
@@ -58,9 +66,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x24){
 				if(ieb.rs == edb.Reg_address) {
 					andf(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					andf(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					andf(ieb.Rs, ieb.Rt, ieb.rd);
@@ -70,9 +80,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x25){
 				if(ieb.rs == edb.Reg_address) {
 					orf(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					orf(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					orf(ieb.Rs, ieb.Rt, ieb.rd);
@@ -82,9 +94,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x26){
 				if(ieb.rs == edb.Reg_address) {
 					xorf(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					xorf(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					xorf(ieb.Rs, ieb.Rt, ieb.rd);
@@ -94,9 +108,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x27){
 				if(ieb.rs == edb.Reg_address) {
 					nor(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					nor(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					nor(ieb.Rs, ieb.Rt, ieb.rd);
@@ -106,9 +122,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x28){
 				if(ieb.rs == edb.Reg_address) {
 					nand(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					nand(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					nand(ieb.Rs, ieb.Rt, ieb.rd);
@@ -118,9 +136,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x2A){
 				if(ieb.rs == edb.Reg_address) {
 					slt(edb.Reg_value, ieb.Rt, ieb.rd);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address) {
 					slt(ieb.Rs, edb.Reg_value, ieb.rd);
+					isrtForwarding = true;
 				}
 				else {
 					slt(ieb.Rs, ieb.Rt, ieb.rd);
@@ -130,6 +150,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x00){
 				if(ieb.rt == edb.Reg_address) {
 					sll(edb.Reg_value, ieb.rd, ieb.shamt, ieb.rt);
+					isrtForwarding = true;
 				}
 				else {
 					sll(ieb.Rt, ieb.rd, ieb.shamt, ieb.rt);
@@ -139,6 +160,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x02){
 				if(ieb.rt == edb.Reg_address) {
 					srl(edb.Reg_value, ieb.rd, ieb.shamt);
+					isrtForwarding = true;
 				}
 				else {
 					srl(ieb.Rt, ieb.rd, ieb.shamt);
@@ -148,6 +170,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.funct == 0x03){
 				if(ieb.rt == edb.Reg_address) {
 					sra(edb.Reg_value, ieb.rd, ieb.shamt);
+					isrtForwarding = true;
 				}
 				else {
 					sra(ieb.Rt, ieb.rd, ieb.shamt);
@@ -165,6 +188,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			if(ieb.op == 0x08){
 				if(ieb.rs == edb.Reg_address){
 					addi(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					addi(ieb.Rs, ieb.rt, ieb.immediate);
@@ -174,6 +198,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x09){
 				if(ieb.rs == edb.Reg_address){
 					addiu(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					addiu(ieb.Rs, ieb.rt, ieb.immediate);
@@ -183,6 +208,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x23){
 				if(ieb.rs == edb.Reg_address){
 					lw(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					lw(ieb.Rs, ieb.rt, ieb.immediate);
@@ -192,6 +218,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x21){
 				if(ieb.rs == edb.Reg_address){
 					lh(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					lh(ieb.Rs, ieb.rt, ieb.immediate);
@@ -201,6 +228,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x25){
 				if(ieb.rs == edb.Reg_address){
 					lhu(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					lhu(ieb.Rs, ieb.rt, ieb.immediate);
@@ -210,6 +238,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x20){
 				if(ieb.rs == edb.Reg_address){
 					lb(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					lb(ieb.Rs, ieb.rt, ieb.immediate);
@@ -219,6 +248,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x24){
 				if(ieb.rs == edb.Reg_address){
 					lbu(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					lbu(ieb.Rs, ieb.rt, ieb.immediate);
@@ -228,9 +258,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x2B){
 				if(ieb.rs == edb.Reg_address){
 					sw(edb.Reg_value, ieb.Rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address){
 					sw(ieb.Rs, edb.Reg_value, ieb.immediate);
+					isrtForwarding = true;
 				}
 				else{
 					sw(ieb.Rs, ieb.Rt, ieb.immediate);
@@ -240,9 +272,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x29){
 				if(ieb.rs == edb.Reg_address){
 					sh(edb.Reg_value, ieb.Rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address){
 					sh(ieb.Rs, edb.Reg_value, ieb.immediate);
+					isrtForwarding = true;
 				}
 				else{
 					sh(ieb.Rs, ieb.Rt, ieb.immediate);
@@ -252,9 +286,11 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x28){
 				if(ieb.rs == edb.Reg_address){
 					sb(edb.Reg_value, ieb.Rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else if(ieb.rt == edb.Reg_address){
 					sb(ieb.Rs, edb.Reg_value, ieb.immediate);
+					isrtForwarding = true;
 				}
 				else{
 					sb(ieb.Rs, ieb.Rt, ieb.immediate);
@@ -268,6 +304,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x0C){
 				if(ieb.rs == edb.Reg_address){
 					andi(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					andi(ieb.Rs, ieb.rt, ieb.immediate);
@@ -277,6 +314,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x0D){
 				if(ieb.rs == edb.Reg_address){
 					ori(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					ori(ieb.Rs, ieb.rt, ieb.immediate);
@@ -286,6 +324,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x0E){
 				if(ieb.rs == edb.Reg_address){
 					nori(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					nori(ieb.Rs, ieb.rt, ieb.immediate);
@@ -295,6 +334,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 			else if(ieb.op == 0x0A){
 				if(ieb.rs == edb.Reg_address){
 					slti(edb.Reg_value, ieb.rt, ieb.immediate);
+					isrsForwarding = true;
 				}
 				else{
 					slti(ieb.Rs, ieb.rt, ieb.immediate);

@@ -22,6 +22,7 @@ public:
 	bool isBranch = false;
 	bool isNOP = true;
 	bool isHalt = false;
+	bool isrsForwarding = false, isrtForwarding = false;
 };
 
 #endif LAB2_ID_STAGE_H

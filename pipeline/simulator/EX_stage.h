@@ -54,6 +54,7 @@ public:
 	bool error[4] = {0};
 	bool isNOP = true;
 	bool isHalt = false;
+	bool isrsForwarding = false, isrtForwarding = false;
 };
 
 #endif LAB2_EX_STAGE_H

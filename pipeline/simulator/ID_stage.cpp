@@ -25,6 +25,8 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 	
 	isNOP = iib.isNOP;
 	isHalt = iib.isHalt;
+	isrsForwarding = false;
+	isrtForwarding = false;
 	
 	if(!isNOP && !isHalt){
 		op = (iib.instructionBuffer >> 26);
@@ -85,9 +87,15 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			immediate = (instruction << 16);
 			immediate = (immediate >> 16);
 			
-			if(rs == edb.Reg_address && op != 0x0F) Rs = edb.Reg_value;
+			if(rs == edb.Reg_address && op != 0x0F) {
+				Rs = edb.Reg_value;
+				if(op == 0x04 || op == 0x05 || op == 0x07) isrsForwarding = true;
+			}
 			else Rs = Register[rs];
-			if(rt == edb.Reg_address && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05) Rt = edb.Reg_value;
+			if(rt == edb.Reg_address && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05) {
+				Rt = edb.Reg_value;
+				if(op == 0x04 || op == 0x05) isrtForwarding = true;
+			}
 			else Rt = Register[rt];
 			
 			//beq
