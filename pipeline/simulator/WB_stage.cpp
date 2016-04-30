@@ -15,18 +15,14 @@ void WB_stage::writeToRegister(DM&WB_buffer dwb, int Register[]){
 	this.isNOP = dwb.isNOP;
 	this.isHalt = dwb.isHalt;
 	
-	if(!isNOP && !isHalt){
+	if(!isNOP && !isHalt && dwb.Register_address != 0x00){
 		//R-TYPE
-		if(op == 0x00 && Register_address != 0x00){
+		if(op == 0x00){
 			Register[dwb.Register_address] = dwb.Register_value;
 		}
 		//J-TYPE
 		else if(op == 0x03){
 			Register[dwb.Register_address] = dwb.Register_value;
-		}
-		//halt
-		else if(op == 0x3F){
-			
 		}
 		//I-TYPE
 		else{
