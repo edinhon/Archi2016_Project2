@@ -1,5 +1,5 @@
-#ifndef LAB2_EX&DM_BUFFER_H
-#define LAB2_EX&DM_BUFFER_H
+#ifndef LAB2_EX_DM_BUFFER_H
+#define LAB2_EX_DM_BUFFER_H
 
 #include<iostream>
 #include<cstdio>
@@ -9,11 +9,11 @@
 
 using namespace std;
 
-class EX&DM_buffer{
+class EX_DM_buffer{
 
 public:
 
-    EX&DM_buffer();
+    EX_DM_buffer();
 	
 	void getFromEXStage(EX_stage exs);
 
@@ -25,4 +25,4 @@ public:
 	bool isNOP = true, isHalt = false;
 };
 
-#endif LAB2_EX&DM_buffer_H
+#endif LAB2_EX_DM_buffer_H

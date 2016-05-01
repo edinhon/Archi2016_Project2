@@ -2,12 +2,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <String>
-#include "ID&EX_buffer.h"
+#include "ID_EX_buffer.h"
 #include "ID_stage.h"
 
 using namespace std;
 
-ID&EX_buffer::ID&EX_buffer(){
+ID_EX_buffer::ID_EX_buffer(){
 	op = 0;
 	rs = 0;
 	rt = 0;
@@ -22,7 +22,7 @@ ID&EX_buffer::ID&EX_buffer(){
 	Reg_address = 0;
 }
 
-void getFromIDStage(ID_stage ids){
+void ID_EX_buffer::getFromIDStage(ID_stage ids){
 	this.op = ids.op;
 	this.rs = ids.rs;
 	this.rt = ids.rt;

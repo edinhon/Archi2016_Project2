@@ -34,10 +34,10 @@ void simulator::runPipeline(){
 	EX_stage exs;
 	DM_stage dms;
 	WB_stage wbs;
-	IF&ID_buffer iib;
-	ID&EX_buffer ieb;
-	EX&DM_buffer edb;
-	DM&WB_buffer dwb;
+	IF_ID_buffer iib;
+	ID_EX_buffer ieb;
+	EX_DM_buffer edb;
+	DM_WB_buffer dwb;
 	
 	inst.readInputData(&PC);
 	memo.readMemory(&(reg.Register[29]));

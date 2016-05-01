@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include "DM&WB_buffer.h"
+#include "DM_WB_buffer.h"
 #include "WB_stage.h"
 
 using namespace std;
@@ -10,8 +10,9 @@ WB_stage::WB_stage(){
 	op = 0;
 }
 	
-void WB_stage::writeToRegister(DM&WB_buffer dwb, int Register[]){
+void WB_stage::writeToRegister(DM_WB_buffer dwb, int Register[]){
 	op = dwb.op;
+	inststr = dwb.inststr;
 	this.isNOP = dwb.isNOP;
 	this.isHalt = dwb.isHalt;
 	

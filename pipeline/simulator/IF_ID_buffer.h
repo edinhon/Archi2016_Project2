@@ -1,16 +1,16 @@
-#ifndef LAB2_IF&ID_BUFFER_H
-#define LAB2_IF&ID_BUFFER_H
+#ifndef LAB2_IF_ID_BUFFER_H
+#define LAB2_IF_ID_BUFFER_H
 
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
 #include "IF_stage.h"
 
-class IF&ID_buffer{
+class IF_ID_buffer{
 
 public:
 
-    IF&ID_buffer();
+    IF_ID_buffer();
 	
 	void getFromIFStage(IF_stage ifs);
 
@@ -19,4 +19,4 @@ public:
 	bool isHalt = false;
 };
 
-#endif LAB2_IF&ID_BUFFER_H
+#endif LAB2_IF_ID_BUFFER_H

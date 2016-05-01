@@ -5,8 +5,8 @@
 #include<cstdio>
 #include<cstdlib>
 #include <String>
-#include "ID&EX_buffer.h"
-#include "EX&DM_buffer.h"
+#include "ID_EX_buffer.h"
+#include "EX_DM_buffer.h"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ class EX_stage{
 
 public:
 	
-	void implement(ID&EX_buffer ieb, EX&DM_buffer edb);
+	void implement(ID_EX_buffer ieb, EX_DM_buffer edb);
 	
 	//R-TYPE
     void add (unsigned int Rs, unsigned int Rt, unsigned int rd);

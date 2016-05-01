@@ -2,13 +2,13 @@
 #include <cstdio>
 #include <cstdlib>
 #include <String>
-#include "ID&EX_buffer.h"
-#include "EX&DM_buffer.h"
+#include "ID_EX_buffer.h"
+#include "EX_DM_buffer.h"
 #include "EX_stage.h"
 
 using namespace std;
 
-void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
+void EX_stage::implement(ID_EX_buffer ieb, EX_DM_buffer edb){
 	this.PC = ieb.PC;
 	this.op = ieb.op;
 	Reg_value = 0;

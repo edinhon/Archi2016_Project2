@@ -2,12 +2,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <String>
-#include "EX&DM_buffer.h"
+#include "EX_DM_buffer.h"
 #include "EX_stage.h"
 
 using namespace std;
 
-ID&EX_buffer::EX&DM_buffer(){
+EX_DM_buffer::EX_DM_buffer(){
 	Reg_value = 0;
 	Reg_address = 0;
 	Data_value = {0};
@@ -15,7 +15,7 @@ ID&EX_buffer::EX&DM_buffer(){
 	op = 0;
 }
 
-void getFromEXStage(EX_stage exs){
+void EX_DM_buffer::getFromEXStage(EX_stage exs){
 	this.isNOP = exs.isNOP;
 	this.isHalt = exs.isHalt;
 	if(!isNOP){

@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include "EX&DM_buffer.h"
+#include <String>
+#include "EX_DM_buffer.h"
 #include "DM_stage.h"
 
 using namespace std;
@@ -14,7 +15,7 @@ DM_stage::DM_stage(){
 	op = 0;
 }
 	
-void DM_stage::writeToData(EX&DM_buffer edb, char Memory[]){
+void DM_stage::writeToData(EX_DM_buffer edb, char Memory[]){
 	
 	this.Reg_value = edb.Reg_value;
 	this.Reg_address = edb.Reg_address;
@@ -24,6 +25,7 @@ void DM_stage::writeToData(EX&DM_buffer edb, char Memory[]){
 	this.Data_address = edb.Data_address;
 	this.op = edb.op;
 	this.PC = edb.PC;
+	this.inststr = edb.inststr;
 	this.isNOP = edb.isNOP;
 	this.isHalt = edb.isHalt;
 	

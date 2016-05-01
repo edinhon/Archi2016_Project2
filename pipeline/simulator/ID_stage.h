@@ -5,10 +5,10 @@
 #include<cstdio>
 #include<cstdlib>
 #include <String>
-#include "IF&ID_buffer.h"
-#include "ID&EX_buffer.h"
-#include "EX&DM_buffer.h"
-#include "DM&WB_buffer.h"
+#include "IF_ID_buffer.h"
+#include "ID_EX_buffer.h"
+#include "EX_DM_buffer.h"
+#include "DM_WB_buffer.h"
 
 using namespace std;
 
@@ -18,7 +18,7 @@ public:
 
     ID_stage();
 	
-	void decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_buffer edb, DM&WB_buffer dwb);
+	void decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_buffer edb, DM_WB_buffer dwb);
 
 	unsigned int op, rs, rt, rd, shamt, funct, address;
 	int immediate;

@@ -3,10 +3,10 @@
 #include <cstdlib>
 #include <String>
 #include "ID_stage.h"
-#include "IF&ID_buffer.h"
-#include "ID&EX_buffer.h"
-#include "EX&DM_buffer.h"
-#include "DM&WB_buffer.h"
+#include "IF_ID_buffer.h"
+#include "ID_EX_buffer.h"
+#include "EX_DM_buffer.h"
+#include "DM_WB_buffer.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ ID_stage::ID_stage(){
 	isBranch = false;
 }
 
-void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_buffer edb, DM&WB_buffer dwb){
+void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_buffer edb, DM_WB_buffer dwb){
 	this.PC = iib.PC;
 	isBranch = false;
 	

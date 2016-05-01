@@ -2,11 +2,11 @@
 #include <cstdio>
 #include <cstdlib>
 #include "IF_stage.h"
-#include "ID&EX_buffer.h"
+#include "ID_EX_buffer.h"
 
 using namespace std;
 
-unsigned int IF_stage::readInstruction(unsigned int *PC, unsigned int I_memory[], ID&EX_buffer ieb){
+unsigned int IF_stage::readInstruction(unsigned int *PC, unsigned int I_memory[], ID_EX_buffer ieb){
 	
 	unsigned int op, rs, rt;
 	isNOP = false;

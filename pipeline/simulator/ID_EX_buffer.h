@@ -1,5 +1,5 @@
-#ifndef LAB2_ID&EX_BUFFER_H
-#define LAB2_ID&EX_BUFFER_H
+#ifndef LAB2_ID_EX_BUFFER_H
+#define LAB2_ID_EX_BUFFER_H
 
 #include<iostream>
 #include<cstdio>
@@ -9,11 +9,11 @@
 
 using namespace std;
 
-class ID&EX_buffer{
+class ID_EX_buffer{
 
 public:
 
-    ID&EX_buffer();
+    ID_EX_buffer();
 	
 	void getFromIDStage(ID_stage ids);
 
@@ -28,4 +28,4 @@ public:
 	bool isNOP = true, isHalt = false;
 };
 
-#endif LAB2_ID&EX_BUFFER_H
+#endif LAB2_ID_EX_BUFFER_H
