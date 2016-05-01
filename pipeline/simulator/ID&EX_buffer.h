@@ -18,6 +18,7 @@ public:
 	int immediate;
 	int Rs, Rt, Rd;
 	unsigned int PC;
+	bool isBranch = false;
 	bool isNOP = true, isHalt = false;
 };
 

@@ -33,6 +33,7 @@ void getFromIDStage(ID_stage ids){
 	this.Rt = ids.op;
 	this.Rd = ids.op;
 	this.PC = ids.PC;
+	isBranch = ids.isBranch;
 	isNOP = ids.isNOP;
 	isHalt = ids.isHalt;
 }
