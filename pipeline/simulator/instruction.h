@@ -17,4 +17,4 @@ public:
 	int times = 0;
 };
 
-#endif LAB2_INSTRUCTION_H
+#endif//LAB2_INSTRUCTION_H

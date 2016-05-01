@@ -20,13 +20,19 @@
 
 using namespace std;
 
+class IF_stage;
+class ID_stage;
+class EX_stage;
+class DM_stage;
+class WB_stage;
+
 class simulator{
 
 public:
 
 	void runPipeline();
-	
-	void printStage(IF_stage ifs, ID_stage ids, EX_stage, exs, DM_stage dms, WB_stage wbs);
+
+	void printStage(FILE *snap, IF_stage ifs, ID_stage ids, EX_stage exs, DM_stage dms, WB_stage wbs);
 };
 
-#endif LAB2_SIMULATOR_H
+#endif//LAB2_SIMULATOR_H

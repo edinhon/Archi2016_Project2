@@ -6,6 +6,10 @@
 #include<cstdlib>
 #include "ID_EX_buffer.h"
 
+using namespace std;
+
+class ID_EX_buffer;
+
 class IF_stage{
 
 public:
@@ -21,4 +25,4 @@ public:
 	bool isHalt = false;
 };
 
-#endif LAB2_IF_STAGE_H
+#endif //LAB2_IF_STAGE_H

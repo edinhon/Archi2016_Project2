@@ -9,18 +9,23 @@
 using namespace std;
 
 void EX_stage::implement(ID_EX_buffer ieb, EX_DM_buffer edb){
-	this.PC = ieb.PC;
-	this.op = ieb.op;
+	PC = ieb.PC;
+	op = ieb.op;
+	rs = ieb.rs;
+	rt= ieb.rt;
 	Reg_value = 0;
 	Reg_address = ieb.Reg_address;
-	Data_value = {0};
+	for(int i = 0 ; i < 4 ; i++){
+        Data_value[i] = 0;
+		error[i] = false;
+	}
 	Data_address = 0;
 	inststr = ieb.inststr;
 	isNOP = ieb.isNOP;
 	isHalt = ieb.isHalt;
 	isrsForwarding = false;
 	isrtForwarding = false;
-	
+
 	if(!isNOP && !isHalt){
 		//R-TYPE
 		if(ieb.op == 0x00){
@@ -358,7 +363,7 @@ void EX_stage::implement(ID_EX_buffer ieb, EX_DM_buffer edb){
 			}*/
 		}
 	}
-	
+
 }
 
 //R-TYPE
@@ -366,7 +371,7 @@ void EX_stage::add (unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Number Overflow"
 	if(Rs > 0 && Rt > 0 && (Rs + Rt) <= 0){
@@ -386,7 +391,7 @@ void EX_stage::addu(unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs + (unsigned int)Rt;
@@ -397,7 +402,7 @@ void EX_stage::sub (unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Number Overflow"
 	if(Rs > 0 && (Rt*-1) > 0 && (Rs + (Rt*-1)) <= 0){
@@ -417,7 +422,7 @@ void EX_stage::andf(unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs & Rt;
@@ -428,7 +433,7 @@ void EX_stage::orf (unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs | Rt;
@@ -439,7 +444,7 @@ void EX_stage::xorf(unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs ^ Rt;
@@ -450,7 +455,7 @@ void EX_stage::nor (unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = ~(Rs | Rt);
@@ -461,7 +466,7 @@ void EX_stage::nand(unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = ~(Rs & Rt);
@@ -472,7 +477,7 @@ void EX_stage::slt (unsigned int Rs, unsigned int Rt, unsigned int rd){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = (Rt > Rs) ? 1 : 0;
@@ -483,7 +488,7 @@ void EX_stage::sll (unsigned int Rt, unsigned int rd, unsigned int shamt, unsign
 	//error "Write to register $0"
 	if(rd == 0x00 && (rt != 0x00 || shamt != 0x00)){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rt << shamt;
@@ -494,7 +499,7 @@ void EX_stage::srl (unsigned int Rt, unsigned int rd, unsigned int shamt){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		if((Rt >> 31) == 0xFFFFFFFF) {
@@ -512,7 +517,7 @@ void EX_stage::sra (unsigned int Rt, unsigned int rd, unsigned int shamt){
 	//error "Write to register $0"
 	if(rd == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rt >> shamt;
@@ -526,7 +531,7 @@ void EX_stage::addi (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Number Overflow"
 	if(Rs > 0 && immediate > 0 && (Rs + immediate) <= 0){
@@ -546,7 +551,7 @@ void EX_stage::addiu(unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs + ((unsigned int)immediate);
@@ -557,7 +562,7 @@ void EX_stage::lw   (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Address Overflow"
 	if((Rs + immediate) > 1020 || (Rs + immediate) < 0){
@@ -587,7 +592,7 @@ void EX_stage::lh   (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Address Overflow"
 	if((Rs + immediate) > 1022 || (Rs + immediate) < 0){
@@ -617,7 +622,7 @@ void EX_stage::lhu  (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Address Overflow"
 	if((Rs + immediate) > 1022 || (Rs + immediate) < 0){
@@ -648,7 +653,7 @@ void EX_stage::lb   (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Address Overflow"
 	if((Rs + immediate) > 1023 || (Rs + immediate) < 0){
@@ -674,7 +679,7 @@ void EX_stage::lbu  (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	//error "Address Overflow"
 	if((Rs + immediate) > 1023 || (Rs + immediate) < 0){
@@ -783,7 +788,7 @@ void EX_stage::lui  (unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = (immediate << 16);
@@ -794,7 +799,7 @@ void EX_stage::andi (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs & ((unsigned int)immediate & 0x0000FFFF);
@@ -805,7 +810,7 @@ void EX_stage::ori  (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs | ((unsigned int)immediate & 0x0000FFFF);
@@ -816,7 +821,7 @@ void EX_stage::nori (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs | ((unsigned int)immediate & 0x0000FFFF);
@@ -828,7 +833,7 @@ void EX_stage::slti (unsigned int Rs, unsigned int rt, int immediate){
 	//error "Write to register $0"
 	if(rt == 0x00){
 		error[0] = true;
-		
+
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = (Rs < immediate) ? 1 : 0;
@@ -837,15 +842,15 @@ void EX_stage::slti (unsigned int Rs, unsigned int rt, int immediate){
 }
 /*void EX_stage::beq  (unsigned int Rs, unsigned int Rt, int immediate){
 	if(Rs == Rt) PC += (1 + immediate);
-	
+
 }
 void EX_stage::bne  (unsigned int Rs, unsigned int Rt, int immediate){
 	if(Rs != Rt) PC += (1 + immediate);
-	
+
 }
 void EX_stage::bgtz (unsigned int Rs, int immediate){
 	if(Rs > 0) PC += (1 + immediate);
-	
+
 }*/
 
 

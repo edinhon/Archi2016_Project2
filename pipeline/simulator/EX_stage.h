@@ -4,18 +4,21 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
-#include <String>
+#include <string>
 #include "ID_EX_buffer.h"
 #include "EX_DM_buffer.h"
 
 using namespace std;
 
+class ID_EX_buffer;
+class EX_DM_buffer;
+
 class EX_stage{
 
 public:
-	
+
 	void implement(ID_EX_buffer ieb, EX_DM_buffer edb);
-	
+
 	//R-TYPE
     void add (unsigned int Rs, unsigned int Rt, unsigned int rd);
     void addu(unsigned int Rs, unsigned int Rt, unsigned int rd);
@@ -50,16 +53,17 @@ public:
     void bgtz (unsigned int Rs,  int immediate);*/
 	//J-TYPE
 	void jal  ();
-	
+
+    unsigned int rs, rt;
 	unsigned int PC;
 	int Reg_value , Data_value[4];
 	unsigned int Reg_address, Data_address;
 	unsigned int op;
-	String inststr;
+	string inststr;
 	bool error[4] = {0};
 	bool isNOP = true;
 	bool isHalt = false;
 	bool isrsForwarding = false, isrtForwarding = false;
 };
 
-#endif LAB2_EX_STAGE_H
+#endif //LAB2_EX_STAGE_H

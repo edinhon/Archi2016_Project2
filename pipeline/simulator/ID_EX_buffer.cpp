@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <String>
+#include <string>
 #include "ID_EX_buffer.h"
 #include "ID_stage.h"
 
@@ -23,20 +23,20 @@ ID_EX_buffer::ID_EX_buffer(){
 }
 
 void ID_EX_buffer::getFromIDStage(ID_stage ids){
-	this.op = ids.op;
-	this.rs = ids.rs;
-	this.rt = ids.rt;
-	this.rd = ids.op;
-	this.shamt = ids.op;
-	this.funct = ids.op;
-	this.address = ids.op;
-	this.immediate = ids.op;
-	this.Rs = ids.op;
-	this.Rt = ids.op;
-	this.Rd = ids.op;
-	this.PC = ids.PC;
-	this.Reg_address = ids.Reg_address;
-	this.inststr = ids.inststr;
+	op = ids.op;
+	rs = ids.rs;
+	rt = ids.rt;
+	rd = ids.op;
+	shamt = ids.shamt;
+	funct = ids.funct;
+	address = ids.address;
+	immediate = ids.immediate;
+	Rs = ids.Rs;
+	Rt = ids.Rt;
+	Rd = ids.Rd;
+	PC = ids.PC;
+	Reg_address = ids.Reg_address;
+	inststr = ids.inststr;
 	isBranch = ids.isBranch;
 	isNOP = ids.isNextNOP;
 	isStall = ids.isStall;

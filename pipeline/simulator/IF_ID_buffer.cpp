@@ -7,13 +7,13 @@
 using namespace std;
 
 IF_ID_buffer::IF_ID_buffer(){
-	
-	this.instructionBuffer = 0;
+
+	instructionBuffer = 0;
 }
 
 void IF_ID_buffer::getFromIFStage(IF_stage ifs){
-	
-	this.isNOP = ifs.isNextNOP;
-	this.isHalt = ifs.isHalt;
-	this.instructionbuffer = ifs.readInstruction;
+
+	isNOP = ifs.isNextNOP;
+    isHalt = ifs.isHalt;
+	instructionBuffer = ifs.instruction;
 }

@@ -6,12 +6,14 @@
 #include<cstdlib>
 #include "IF_stage.h"
 
+class IF_stage;
+
 class IF_ID_buffer{
 
 public:
 
     IF_ID_buffer();
-	
+
 	void getFromIFStage(IF_stage ifs);
 
 	unsigned int instructionBuffer, PC;
@@ -19,4 +21,4 @@ public:
 	bool isHalt = false;
 };
 
-#endif LAB2_IF_ID_BUFFER_H
+#endif //LAB2_IF_ID_BUFFER_H
