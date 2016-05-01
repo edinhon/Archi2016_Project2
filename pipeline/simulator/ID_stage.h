@@ -4,10 +4,13 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
+#include <String>
 #include "IF&ID_buffer.h"
 #include "ID&EX_buffer.h"
 #include "EX&DM_buffer.h"
 #include "DM&WB_buffer.h"
+
+using namespace std;
 
 class ID_stage{
 
@@ -22,9 +25,11 @@ public:
 	int Rs, Rt, Rd;
 	unsigned int Reg_address;
 	unsigned int PC;
+	String inststr;
 	bool isBranch = false;
 	bool isNOP = true;
 	bool isNextNOP = true;
+	bool isStall = false;
 	bool isHalt = false;
 	bool isrsForwarding = false, isrtForwarding = false;
 };

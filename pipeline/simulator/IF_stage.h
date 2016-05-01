@@ -16,6 +16,7 @@ public:
 	unsigned int newPC;
 	bool isNOP = true;
 	bool isNextNOP = true;
+	bool isStall = false;
 	bool isFlush = false;
 	bool isHalt = false;
 };

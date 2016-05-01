@@ -11,6 +11,7 @@ unsigned int IF_stage::readInstruction(unsigned int *PC, unsigned int I_memory[]
 	unsigned int op, rs, rt;
 	isNOP = false;
 	isNextNOP = false;
+	isStall = false;
 	isFlush = false;
 	
 	*PC = newPC;
@@ -27,6 +28,7 @@ unsigned int IF_stage::readInstruction(unsigned int *PC, unsigned int I_memory[]
 	
 	if(ieb.isStall){
 		newPC = *PC;
+		isStall = true;
 	}
 	else if(ieb.Branch){
 		newPC = ieb.PC;

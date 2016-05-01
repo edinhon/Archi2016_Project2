@@ -4,7 +4,10 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
+#include <String>
 #include "ID_stage.h"
+
+using namespace std;
 
 class ID&EX_buffer{
 
@@ -19,7 +22,9 @@ public:
 	int Rs, Rt, Rd;
 	unsigned int Reg_address;
 	unsigned int PC;
+	String inststr;
 	bool isBranch = false;
+	bool isStall = false;
 	bool isNOP = true, isHalt = false;
 };
 

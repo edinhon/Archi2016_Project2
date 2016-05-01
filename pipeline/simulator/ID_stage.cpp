@@ -1,11 +1,14 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <String>
 #include "ID_stage.h"
 #include "IF&ID_buffer.h"
 #include "ID&EX_buffer.h"
 #include "EX&DM_buffer.h"
 #include "DM&WB_buffer.h"
+
+using namespace std;
 
 ID_stage::ID_stage(){
 	op = 0;
@@ -28,7 +31,9 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 	
 	isNOP = iib.isNOP;
 	isNextNOP = isNOP;
+	isStall = false;
 	isHalt = iib.isHalt;
+	if(isHalt) inststr = "halt";
 	isrsForwarding = false;
 	isrtForwarding = false;
 	unsigned int instruction = iib.instructionBuffer;
@@ -53,17 +58,22 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			
 			//stall by conditional branch data hazard
 			if(funct == 0x08){
-				if(rs == ieb.Reg_address) isNextNOP = true;
+				if(rs == ieb.Reg_address) {
+					isNextNOP = true;
+					isStall = true;
+				}
 			}
 			
 			//stall by Reg_address in DM stage
 			//sll sra srl not need to read Rs
 			if(rs == dwb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03){
 				isNextNOP = true;
+				isStall = true;
 			}
 			//jr not need to read Rt
 			if(rt == dwb.Reg_address && funct != 0x08){
 				isNextNOP = true;
+				isStall = true;
 			}
 			
 			//stall by load memory
@@ -71,10 +81,12 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 				//lui not need to read Rs
 				if(rs == ieb.rt && funct != 0x0F){
 					isNextNOP = true;
+					isStall = true;
 				}
 				//only save beq bne need to read rt
 				if(rt == ieb.rt && funct == 0x2B && funct == 0x29 && funct == 0x28 && funct == 0x04 && funct == 0x05){
 					isNextNOP = true;
+					isStall = true;
 				}
 			}
 			
@@ -91,6 +103,59 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 				PC = Rs >> 2;
 				isBranch = true;
 			}
+			
+			//add
+			if(funct == 0x20){
+				inststr = "add";
+			}
+			//addu
+			else if(funct == 0x21){
+				inststr = "addu";
+			}
+			//sub
+			else if(funct == 0x22){
+				inststr = "sub";
+			}
+			//and
+			else if(funct == 0x24){
+				inststr = "and";
+			}
+			//or
+			else if(funct == 0x25){
+				inststr = "or";
+			}
+			//xor
+			else if(funct == 0x26){
+				inststr = "xor";
+			}
+			//nor
+			else if(funct == 0x27){
+				inststr = "nor";
+			}
+			//nand
+			else if(funct == 0x28){
+				inststr = "nand";
+			}
+			//slt
+			else if(funct == 0x2A){
+				inststr = "slt";
+			}
+			//sll
+			else if(funct == 0x00){
+				inststr = "sll";
+			}
+			//srl
+			else if(funct == 0x02){
+				inststr = "srl";
+			}
+			//sra
+			else if(funct == 0x03){
+				inststr = "sra";
+			}
+			//jr
+			else if(funct == 0x08){
+				inststr = "jr";
+			}
 		}
 		//J-TYPE
 		//j
@@ -98,6 +163,7 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			PC = address;
+			inststr = "j";
 			isBranch = true;
 		}
 		//jal
@@ -105,6 +171,7 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			PC = address;
+			inststr = "jal"
 			isBranch = true;
 			Reg_address = 0x31;
 		}
@@ -113,6 +180,7 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			isHalt = true;
+			inststr = "halt";
 		}
 		//I-TYPE
 		else{
@@ -126,18 +194,26 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			
 			//stall by conditional branch data hazard
 			if(op == 0x04 || op == 0x05 || op == 0x07){
-				if(rs == ieb.Reg_address) isNextNOP = true;
-				if(rt == ieb.Reg_address && op != 0x07) isNextNOP = true;
+				if(rs == ieb.Reg_address) {
+					isNextNOP = true;
+					isStall = true;
+				}
+				if(rt == ieb.Reg_address && op != 0x07) {
+					isNextNOP = true;
+					isStall = true;
+				}
 			}
 			
 			//stall by Reg_address in DM stage
 			//lui not need to read Rs
 			if(rs == dwb.Reg_address && op != 0x0F){
 				isNextNOP = true;
+				isStall = true;
 			}
 			//only save beq bne need to read rt
 			if(rt == dwb.Reg_address && (op == 0x2B || op == 0x29 || op == 0x28 || op == 0x04 || op == 0x05) ){
 				isNextNOP = true;
+				isStall = true;
 			}
 			
 			//stall by load memory
@@ -145,10 +221,12 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 				//lui not need to read Rs
 				if(rs == ieb.rt && op != 0x0F){
 					isNextNOP = true;
+					isStall = true;
 				}
 				//only save beq bne need to read rt
 				if(rt == ieb.rt && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05){
 					isNextNOP = true;
+					isStall = true;
 				}
 			}
 			
@@ -180,7 +258,79 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 				if(Rs > 0) PC += (1 + immediate);
 				isBranch = true;
 			}
-		}
+			
+			//addi
+			if(op == 0x08){
+				inststr = "addi";
+			}
+			//addiu
+			else if(op == 0x09){
+				inststr = "addiu";
+			}
+			//lw
+			else if(op == 0x23){
+				inststr = "lw";
+			}
+			//lh
+			else if(op == 0x21){
+				inststr = "lh";
+			}
+			//lhu
+			else if(op == 0x25){
+				inststr = "lhu";
+			}
+			//lb
+			else if(op == 0x20){
+				inststr = "lb";
+			}
+			//lbu
+			else if(op == 0x24){
+				inststr = "lbu";
+			}
+			//sw
+			else if(op == 0x2B){
+				inststr = "sw";
+			}
+			//sh
+			else if(op == 0x29){
+				inststr = "sh";
+			}
+			//sb
+			else if(op == 0x28){
+				inststr = "sb";
+			}
+			//lui
+			else if(op == 0x0F){
+				inststr = "lui";
+			}
+			//andi
+			else if(op == 0x0C){
+				inststr = "andi";
+			}
+			//ori
+			else if(op == 0x0D){
+				inststr = "ori";
+			}
+			//nori
+			else if(op == 0x0E){
+				inststr = "nori";
+			}
+			//slti
+			else if(op == 0x0A){
+				inststr = "slti";
+			}
+			//beq
+			else if(op == 0x04){
+				inststr = "beq";
+			}
+			//bne
+			else if(op == 0x05){
+				inststr = "bne";
+			}
+			//bgtz
+			else if(op == 0x07){
+				inststr = "bgtz";
+			}
 		}
 	}
 }

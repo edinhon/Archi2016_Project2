@@ -4,8 +4,11 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
+#include <String>
 #include "ID&EX_buffer.h"
 #include "EX&DM_buffer.h"
+
+using namespace std;
 
 class EX_stage{
 
@@ -52,6 +55,7 @@ public:
 	int Reg_value , Data_value[4];
 	unsigned int Reg_address, Data_address;
 	unsigned int op;
+	String inststr;
 	bool error[4] = {0};
 	bool isNOP = true;
 	bool isHalt = false;

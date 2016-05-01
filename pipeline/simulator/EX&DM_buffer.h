@@ -4,7 +4,10 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
+#include <String>
 #include "EX_stage.h"
+
+using namespace std;
 
 class EX&DM_buffer{
 
@@ -18,6 +21,7 @@ public:
 	int Reg_value, Data_value[4];
 	unsigned int Reg_address, Data_address;
 	unsigned int op;
+	String inststr;
 	bool isNOP = true, isHalt = false;
 };
 

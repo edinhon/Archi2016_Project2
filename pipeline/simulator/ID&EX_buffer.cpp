@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <String>
 #include "ID&EX_buffer.h"
 #include "ID_stage.h"
 
@@ -35,7 +36,9 @@ void getFromIDStage(ID_stage ids){
 	this.Rd = ids.op;
 	this.PC = ids.PC;
 	this.Reg_address = ids.Reg_address;
+	this.inststr = ids.inststr;
 	isBranch = ids.isBranch;
 	isNOP = ids.isNextNOP;
+	isStall = ids.isStall;
 	isHalt = ids.isHalt;
 }

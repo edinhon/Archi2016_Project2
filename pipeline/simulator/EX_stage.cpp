@@ -1,9 +1,12 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <String>
 #include "ID&EX_buffer.h"
 #include "EX&DM_buffer.h"
 #include "EX_stage.h"
+
+using namespace std;
 
 void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 	this.PC = ieb.PC;
@@ -12,6 +15,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 	Reg_address = ieb.Reg_address;
 	Data_value = {0};
 	Data_address = 0;
+	inststr = ieb.inststr;
 	isNOP = ieb.isNOP;
 	isHalt = ieb.isHalt;
 	isrsForwarding = false;

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
+#include <String>
 #include "EX&DM_buffer.h"
 #include "EX_stage.h"
 
@@ -25,6 +26,7 @@ void getFromEXStage(EX_stage exs){
 		}
 		this.Data_address = exs.Data_address;
 		this.op = exs.op;
+		this.inststr = exs.inststr;
 		this.PC = exs.PC;
 	}
 }
