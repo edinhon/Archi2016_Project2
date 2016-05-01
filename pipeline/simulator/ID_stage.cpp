@@ -2,6 +2,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include "ID_stage.h"
+#include "IF&ID_buffer.h"
+#include "ID&EX_buffer.h"
 #include "EX&DM_buffer.h"
 
 ID_stage::ID_stage(){
@@ -19,7 +21,7 @@ ID_stage::ID_stage(){
 	isBranch = false;
 }
 
-void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
+void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_buffer edb){
 	this.PC = iib.PC;
 	isBranch = false;
 	
@@ -45,8 +47,19 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			funct = (instruction << 26);
 			funct = (funct >> 26);
 			
-			//jr rs forwarding
-			if(rs == edb.Reg_address && funct == 0x08) {
+			//if need to stall, add NOP to ID/EX_buffer
+			if(ieb.op == 0x23 || ieb.op == 0x21 || ieb.op == 0x25 || ieb.op == 0x20 || ieb.op == 0x24){
+				//sll srl sra not need to read rs
+				if(rs == ieb.rt && funct != 0x00 && funct != 0x02 && funct != 0x03){
+					isNOP = true;
+				}
+				//jr not need to read rt
+				if(rt == ieb.rt && funct != 0x08){
+					isNOP = true;
+				}
+			}
+			//jr rs forwarding if not stall
+			else if(rs == edb.Reg_address && funct == 0x08) {
 				Rs = edb.Reg_value;
 				isrsForwarding = true;
 			}
@@ -89,14 +102,26 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			immediate = (instruction << 16);
 			immediate = (immediate >> 16);
 			
-			//beq bne bgtz rs forwarding
-			if(rs == edb.Reg_address && (op == 0x04 || op == 0x05 || op == 0x07) ) {
+			//if need stall, add NOP to ID/EX_buffer
+			if(ieb.op == 0x23 || ieb.op == 0x21 || ieb.op == 0x25 || ieb.op == 0x20 || ieb.op == 0x24){
+				//lui not need to read Rs
+				if(rs == ieb.rt && funct != 0x0F){
+					isNOP = true;
+				}
+				//only save beq bne need to read rt
+				if(rt == ieb.rt && funct == 0x2B && funct == 0x29 && funct == 0x28 && funct == 0x04 && funct == 0x05){
+					isNOP = true;
+				}
+			}
+			
+			//beq bne bgtz rs forwarding if not stall
+			if(rs == edb.Reg_address && (op == 0x04 || op == 0x05 || op == 0x07) && !isNOP) {
 				Rs = edb.Reg_value;
 				isrsForwarding = true;
 			}
 			else Rs = Register[rs];
-			//beq bne rt forwarding
-			if(rt == edb.Reg_address && (op == 0x04 || op == 0x05) ) {
+			//beq bne rt forwarding if not stall
+			if(rt == edb.Reg_address && (op == 0x04 || op == 0x05) && !isNOP) {
 				Rt = edb.Reg_value;
 				isrtForwarding = true;
 			}
