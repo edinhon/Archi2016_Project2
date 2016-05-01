@@ -45,14 +45,12 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			funct = (instruction << 26);
 			funct = (funct >> 26);
 			
-			if(rs == edb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03) {
+			//jr rs forwarding
+			if(rs == edb.Reg_address && funct == 0x08) {
 				Rs = edb.Reg_value;
-				//jr rs forwarding
-				if(funct == 0x08) isrsForwarding = true;
+				isrsForwarding = true;
 			}
 			else Rs = Register[rs];
-			if(rt == edb.Reg_address && funct != 0x08) Rt = edb.Reg_value;
-			else Rt = Register[rt];
 			
 			//printf("%X %X %X %X %X\n", rs, rt, rd, shamt, funct);
 			//jr
@@ -91,16 +89,16 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			immediate = (instruction << 16);
 			immediate = (immediate >> 16);
 			
-			if(rs == edb.Reg_address && op != 0x0F) {
+			//beq bne bgtz rs forwarding
+			if(rs == edb.Reg_address && (op == 0x04 || op == 0x05 || op == 0x07) ) {
 				Rs = edb.Reg_value;
-				//beq bne bgtz rs forwarding
-				if(op == 0x04 || op == 0x05 || op == 0x07) isrsForwarding = true;
+				isrsForwarding = true;
 			}
 			else Rs = Register[rs];
-			if(rt == edb.Reg_address && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05) {
+			//beq bne rt forwarding
+			if(rt == edb.Reg_address && (op == 0x04 || op == 0x05) ) {
 				Rt = edb.Reg_value;
-				//beq bne rt forwarding
-				if(op == 0x04 || op == 0x05) isrtForwarding = true;
+				isrtForwarding = true;
 			}
 			else Rt = Register[rt];
 			
