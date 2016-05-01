@@ -49,7 +49,8 @@ public:
 	void jal  ();
 	
 	unsigned int PC;
-	unsigned int Reg_value, Reg_address, Data_value[4], Data_address;
+	int Reg_value , Data_value[4];
+	unsigned int Reg_address, Data_address;
 	unsigned int op;
 	bool error[4] = {0};
 	bool isNOP = true;

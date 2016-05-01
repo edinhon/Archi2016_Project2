@@ -9,7 +9,7 @@ void EX_stage::implement(ID&EX_buffer ieb, EX&DM_buffer edb){
 	this.PC = ieb.PC;
 	this.op = ieb.op;
 	Reg_value = 0;
-	Reg_address = 0;
+	Reg_address = ieb.Reg_address;
 	Data_value = {0};
 	Data_address = 0;
 	isNOP = ieb.isNOP;
@@ -794,7 +794,7 @@ void EX_stage::andi (unsigned int Rs, unsigned int rt, int immediate){
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs & ((unsigned int)immediate & 0x0000FFFF);
-		
+		Reg_address = rt;
 	}
 }
 void EX_stage::ori  (unsigned int Rs, unsigned int rt, int immediate){
@@ -805,7 +805,7 @@ void EX_stage::ori  (unsigned int Rs, unsigned int rt, int immediate){
 	}
 	if(!error[0] && !error[2] && !error[3]){
 		Reg_value = Rs | ((unsigned int)immediate & 0x0000FFFF);
-		
+		Reg_address = rt;
 	}
 }
 void EX_stage::nori (unsigned int Rs, unsigned int rt, int immediate){

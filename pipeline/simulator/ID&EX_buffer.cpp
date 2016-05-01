@@ -18,6 +18,7 @@ ID&EX_buffer::ID&EX_buffer(){
 	Rs = 0;
 	Rt = 0;
 	Rd = 0;
+	Reg_address = 0;
 }
 
 void getFromIDStage(ID_stage ids){
@@ -33,6 +34,7 @@ void getFromIDStage(ID_stage ids){
 	this.Rt = ids.op;
 	this.Rd = ids.op;
 	this.PC = ids.PC;
+	this.Reg_address = ids.Reg_address;
 	isBranch = ids.isBranch;
 	isNOP = ids.isNOP;
 	isHalt = ids.isHalt;

@@ -17,6 +17,7 @@ public:
 	unsigned int op, rs, rt, rd, shamt, funct, address;
 	int immediate;
 	int Rs, Rt, Rd;
+	unsigned int Reg_address;
 	unsigned int PC;
 	bool isBranch = false;
 	bool isNOP = true, isHalt = false;

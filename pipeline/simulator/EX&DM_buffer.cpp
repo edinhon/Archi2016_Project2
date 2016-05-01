@@ -15,14 +15,16 @@ ID&EX_buffer::EX&DM_buffer(){
 }
 
 void getFromEXStage(EX_stage exs){
-	this.Reg_value = exs.Reg_value;
-	this.Reg_address = exs.Reg_address;
-	for(int i = 0 ; i < 4 ; i++){
-		this.Data_value[i] = exs.Data_value[i]
-	}
-	this.Data_address = exs.Data_address;
-	this.op = exs.op;
-	this.PC = exs.PC;
 	this.isNOP = exs.isNOP;
 	this.isHalt = exs.isHalt;
+	if(!isNOP){
+		this.Reg_value = exs.Reg_value;
+		this.Reg_address = exs.Reg_address;
+		for(int i = 0 ; i < 4 ; i++){
+			this.Data_value[i] = exs.Data_value[i]
+		}
+		this.Data_address = exs.Data_address;
+		this.op = exs.op;
+		this.PC = exs.PC;
+	}
 }
