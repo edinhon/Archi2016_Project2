@@ -24,6 +24,7 @@ public:
 	unsigned int PC;
 	bool isBranch = false;
 	bool isNOP = true;
+	bool isNextNOP = true;
 	bool isHalt = false;
 	bool isrsForwarding = false, isrtForwarding = false;
 };

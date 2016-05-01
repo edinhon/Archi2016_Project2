@@ -43,6 +43,7 @@ void simulator::runPipeline(){
 	reg.printRegister(snap);
 	fprintf(snap, "PC: 0x%0.8X\n\n\n", PC*4);
 	i++;
+	ifs.newPC = PC;
 	
 	while( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3]){
 		

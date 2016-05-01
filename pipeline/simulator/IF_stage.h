@@ -13,7 +13,10 @@ public:
 	unsigned int readInstruction(unsigned int *PC, unsigned int I_memory[], ID&EX_buffer ieb);
 	
 	unsigned int instruction;
+	unsigned int newPC;
 	bool isNOP = true;
+	bool isNextNOP = true;
+	bool isFlush = false;
 	bool isHalt = false;
 };
 

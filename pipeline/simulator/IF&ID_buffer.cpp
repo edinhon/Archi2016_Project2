@@ -13,7 +13,7 @@ IF&ID_buffer::IF&ID_buffer(){
 
 void IF&ID_buffer::getFromIFStage(IF_stage ifs){
 	
-	this.isNOP = ifs.isNOP;
+	this.isNOP = ifs.isNextNOP;
 	this.isHalt = ifs.isHalt;
 	this.instructionbuffer = ifs.readInstruction;
 }

@@ -27,6 +27,7 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 	isBranch = false;
 	
 	isNOP = iib.isNOP;
+	isNextNOP = isNOP;
 	isHalt = iib.isHalt;
 	isrsForwarding = false;
 	isrtForwarding = false;
@@ -52,33 +53,33 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			
 			//stall by conditional branch data hazard
 			if(funct == 0x08){
-				if(rs == ieb.Reg_address) isNOP = true;
+				if(rs == ieb.Reg_address) isNextNOP = true;
 			}
 			
 			//stall by Reg_address in DM stage
 			//sll sra srl not need to read Rs
 			if(rs == dwb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03){
-				isNOP = true;
+				isNextNOP = true;
 			}
 			//jr not need to read Rt
 			if(rt == dwb.Reg_address && funct != 0x08){
-				isNOP = true;
+				isNextNOP = true;
 			}
 			
 			//stall by load memory
 			if(ieb.op == 0x23 || ieb.op == 0x21 || ieb.op == 0x25 || ieb.op == 0x20 || ieb.op == 0x24){
 				//lui not need to read Rs
 				if(rs == ieb.rt && funct != 0x0F){
-					isNOP = true;
+					isNextNOP = true;
 				}
 				//only save beq bne need to read rt
 				if(rt == ieb.rt && funct == 0x2B && funct == 0x29 && funct == 0x28 && funct == 0x04 && funct == 0x05){
-					isNOP = true;
+					isNextNOP = true;
 				}
 			}
 			
 			//jr rs forwarding if not stall
-			if(rs == edb.Reg_address && !edb.isNOP && funct == 0x08) {
+			if(rs == edb.Reg_address && !isNOP && funct == 0x08) {
 				Rs = edb.Reg_value;
 				isrsForwarding = true;
 			}
@@ -125,40 +126,40 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, ID&EX_buffer ieb, EX&DM_
 			
 			//stall by conditional branch data hazard
 			if(op == 0x04 || op == 0x05 || op == 0x07){
-				if(rs == ieb.Reg_address) isNOP = true;
-				if(rt == ieb.Reg_address && op != 0x07) isNOP = true;
+				if(rs == ieb.Reg_address) isNextNOP = true;
+				if(rt == ieb.Reg_address && op != 0x07) isNextNOP = true;
 			}
 			
 			//stall by Reg_address in DM stage
 			//lui not need to read Rs
 			if(rs == dwb.Reg_address && op != 0x0F){
-				isNOP = true;
+				isNextNOP = true;
 			}
 			//only save beq bne need to read rt
 			if(rt == dwb.Reg_address && (op == 0x2B || op == 0x29 || op == 0x28 || op == 0x04 || op == 0x05) ){
-				isNOP = true;
+				isNextNOP = true;
 			}
 			
 			//stall by load memory
 			if(ieb.op == 0x23 || ieb.op == 0x21 || ieb.op == 0x25 || ieb.op == 0x20 || ieb.op == 0x24){
 				//lui not need to read Rs
 				if(rs == ieb.rt && op != 0x0F){
-					isNOP = true;
+					isNextNOP = true;
 				}
 				//only save beq bne need to read rt
 				if(rt == ieb.rt && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05){
-					isNOP = true;
+					isNextNOP = true;
 				}
 			}
 			
 			//beq bne bgtz rs forwarding if not stall
-			if(rs == edb.Reg_address && !edb.isNOP && (op == 0x04 || op == 0x05 || op == 0x07) && !isNOP) {
+			if(rs == edb.Reg_address && isNOP && (op == 0x04 || op == 0x05 || op == 0x07) && !isNOP) {
 				Rs = edb.Reg_value;
 				isrsForwarding = true;
 			}
 			else Rs = Register[rs];
 			//beq bne rt forwarding if not stall
-			if(rt == edb.Reg_address && !edb.isNOP && (op == 0x04 || op == 0x05) && !isNOP) {
+			if(rt == edb.Reg_address && isNOP && (op == 0x04 || op == 0x05) && !isNOP) {
 				Rt = edb.Reg_value;
 				isrtForwarding = true;
 			}

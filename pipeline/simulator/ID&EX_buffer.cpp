@@ -36,6 +36,6 @@ void getFromIDStage(ID_stage ids){
 	this.PC = ids.PC;
 	this.Reg_address = ids.Reg_address;
 	isBranch = ids.isBranch;
-	isNOP = ids.isNOP;
+	isNOP = ids.isNextNOP;
 	isHalt = ids.isHalt;
 }
