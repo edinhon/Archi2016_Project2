@@ -45,7 +45,11 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			funct = (instruction << 26);
 			funct = (funct >> 26);
 			
-			if(rs == edb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03) Rs = edb.Reg_value;
+			if(rs == edb.Reg_address && funct != 0x00 && funct != 0x02 && funct != 0x03) {
+				Rs = edb.Reg_value;
+				//jr rs forwarding
+				if(funct == 0x08) isrsForwarding = true;
+			}
 			else Rs = Register[rs];
 			if(rt == edb.Reg_address && funct != 0x08) Rt = edb.Reg_value;
 			else Rt = Register[rt];
@@ -89,11 +93,13 @@ void ID_stage::decode(int Register[], IF&ID_buffer iib, EX&DM_buffer edb){
 			
 			if(rs == edb.Reg_address && op != 0x0F) {
 				Rs = edb.Reg_value;
+				//beq bne bgtz rs forwarding
 				if(op == 0x04 || op == 0x05 || op == 0x07) isrsForwarding = true;
 			}
 			else Rs = Register[rs];
 			if(rt == edb.Reg_address && op == 0x2B && op == 0x29 && op == 0x28 && op == 0x04 && op == 0x05) {
 				Rt = edb.Reg_value;
+				//beq bne rt forwarding
 				if(op == 0x04 || op == 0x05) isrtForwarding = true;
 			}
 			else Rt = Register[rt];
