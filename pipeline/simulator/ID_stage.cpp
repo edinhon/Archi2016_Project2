@@ -57,6 +57,14 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			funct = (funct >> 26);
 			if(op != 0x08) Reg_address = rd;
 
+			//jr rs forwarding if not stall
+			if(rs == edb.oldReg_address && !isNOP && funct == 0x08
+				&& edb.oldinststr != "LW" && edb.oldinststr != "LH" && edb.oldinststr != "LHU" && edb.oldinststr != "LB" && edb.oldinststr != "LBU") {
+				Rs = edb.oldReg_value;
+				isrsForwarding = true;
+			}
+			else Rs = Register[rs];
+
 			//stall by conditional branch data hazard
 			if(funct == 0x08){
 				if(rs == ieb.Reg_address) {
@@ -83,7 +91,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			//stall by load memory
 			if(ieb.op == 0x23 || ieb.op == 0x21 || ieb.op == 0x25 || ieb.op == 0x20 || ieb.op == 0x24){
 				//lui not need to read Rs
-				if(rs == ieb.rt && funct != 0x0F){
+				if(rs == ieb.rt && funct != 0x0F && !isrsForwarding){
 					isNextNOP = true;
 					isStall = true;
 					//printf("stall 3 rs\n");
@@ -95,13 +103,6 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 					//printf("stall 3 rt\n");
 				}
 			}
-
-			//jr rs forwarding if not stall
-			if(rs == edb.Reg_address && !isNOP && funct == 0x08) {
-				Rs = edb.Reg_value;
-				isrsForwarding = true;
-			}
-			else Rs = Register[rs];
 
 			//printf("%X %X %X %X %X\n", rs, rt, rd, shamt, funct);
 			//jr
@@ -198,6 +199,22 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			immediate = (immediate >> 16);
 			if(op != 0x2B && op != 0x29 && op != 0x28 && op != 0x04 && op != 0x05 && op != 0x07) Reg_address = rt;
 
+
+			//beq bne bgtz rs forwarding if not stall
+			if(rs == edb.oldReg_address && (op == 0x04 || op == 0x05 || op == 0x07) && !isNOP
+				&& edb.oldinststr != "LW" && edb.oldinststr != "LH" && edb.oldinststr != "LHU" && edb.oldinststr != "LB" && edb.oldinststr != "LBU") {
+				Rs = edb.oldReg_value;
+				isrsForwarding = true;
+			}
+			else Rs = Register[rs];
+			//beq bne rt forwarding if not stall
+			if(rt == edb.oldReg_address && (op == 0x04 || op == 0x05) && !isNOP
+				&& edb.oldinststr != "LW" && edb.oldinststr != "LH" && edb.oldinststr != "LHU" && edb.oldinststr != "LB" && edb.oldinststr != "LBU") {
+				Rt = edb.oldReg_value;
+				isrtForwarding = true;
+			}
+			else Rt = Register[rt];
+						
 			//stall by conditional branch data hazard
 			if(op == 0x04 || op == 0x05 || op == 0x07){
 				if(rs == ieb.Reg_address) {
@@ -211,16 +228,16 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 					//printf("stall 1 rt\n");
 				}
 			}
-
+			
 			//stall by Reg_address in DM stage
 			//lui not need to read Rs
-			if(rs == dwb.Reg_address && op != 0x0F){
+			if(rs == dwb.Reg_address && op != 0x0F && !isrsForwarding){
 				isNextNOP = true;
 				isStall = true;
 				//printf("stall 2 rs\n");
 			}
 			//only save beq bne need to read rt
-			if(rt == dwb.Reg_address && (op == 0x2B || op == 0x29 || op == 0x28 || op == 0x04 || op == 0x05) ){
+			if(rt == dwb.Reg_address && (op == 0x2B || op == 0x29 || op == 0x28 || op == 0x04 || op == 0x05) && !isrtForwarding){
 				isNextNOP = true;
 				isStall = true;
 				//printf("stall 2 rt\n");
@@ -241,19 +258,6 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 					//printf("stall 3 rt\n");
 				}
 			}
-
-			//beq bne bgtz rs forwarding if not stall
-			if(rs == edb.Reg_address && !isNOP && (op == 0x04 || op == 0x05 || op == 0x07) && !isNOP) {
-				Rs = edb.Reg_value;
-				isrsForwarding = true;
-			}
-			else Rs = Register[rs];
-			//beq bne rt forwarding if not stall
-			if(rt == edb.Reg_address && !isNOP && (op == 0x04 || op == 0x05) && !isNOP) {
-				Rt = edb.Reg_value;
-				isrtForwarding = true;
-			}
-			else Rt = Register[rt];
 
 			//beq
 			if(op == 0x04){

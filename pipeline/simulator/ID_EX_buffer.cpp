@@ -36,7 +36,6 @@ void ID_EX_buffer::getFromIDStage(ID_stage ids){
 	Rd = ids.Rd;
 	PC = ids.PC;
 	Reg_address = ids.Reg_address;
-	printf("REGADD = %d\n", Reg_address);
 	inststr = ids.inststr;
 	isBranch = ids.isBranch;
 	isNOP = ids.isNextNOP;

@@ -20,8 +20,11 @@ public:
 	unsigned int PC;
 	int Reg_value, Data_value[4];
 	unsigned int Reg_address, Data_address;
+	int oldReg_value;
+	unsigned int oldReg_address;
 	unsigned int op;
-	string inststr;
+	unsigned int oldop;
+	string inststr, oldinststr;
 	bool isNOP = true, isHalt = false;
 };
 
