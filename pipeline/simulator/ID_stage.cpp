@@ -26,17 +26,18 @@ ID_stage::ID_stage(){
 }
 
 void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_buffer edb, DM_WB_buffer dwb){
+	
 	PC = iib.PC;
-	isBranch = false;
-
 	isNOP = iib.isNOP;
 	isNextNOP = isNOP;
-	isStall = false;
 	isHalt = iib.isHalt;
-	if(isHalt) inststr = "halt";
+	if(isHalt) inststr = "HALT";
+	instruction = iib.instructionBuffer;
+	isStall = false;
+	isBranch = false;
 	isrsForwarding = false;
 	isrtForwarding = false;
-	unsigned int instruction = iib.instructionBuffer;
+	Reg_address = 0;
 
 	if(!isNOP && !isHalt){
 		op = (instruction >> 26);
@@ -106,23 +107,23 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 
 			//add
 			if(funct == 0x20){
-				inststr = "add";
+				inststr = "ADD";
 			}
 			//addu
 			else if(funct == 0x21){
-				inststr = "addu";
+				inststr = "ADDU";
 			}
 			//sub
 			else if(funct == 0x22){
-				inststr = "sub";
+				inststr = "SUB";
 			}
 			//and
 			else if(funct == 0x24){
-				inststr = "and";
+				inststr = "AND";
 			}
 			//or
 			else if(funct == 0x25){
-				inststr = "or";
+				inststr = "OR";
 			}
 			//xor
 			else if(funct == 0x26){
@@ -134,27 +135,27 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			}
 			//nand
 			else if(funct == 0x28){
-				inststr = "nand";
+				inststr = "NAND";
 			}
 			//slt
 			else if(funct == 0x2A){
-				inststr = "slt";
+				inststr = "SLT";
 			}
 			//sll
 			else if(funct == 0x00){
-				inststr = "sll";
+				inststr = "SLL";
 			}
 			//srl
 			else if(funct == 0x02){
-				inststr = "srl";
+				inststr = "SRL";
 			}
 			//sra
 			else if(funct == 0x03){
-				inststr = "sra";
+				inststr = "SRA";
 			}
 			//jr
 			else if(funct == 0x08){
-				inststr = "jr";
+				inststr = "JR";
 			}
 		}
 		//J-TYPE
@@ -163,7 +164,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			PC = address;
-			inststr = "j";
+			inststr = "J";
 			isBranch = true;
 		}
 		//jal
@@ -171,7 +172,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			PC = address;
-			inststr = "jal";
+			inststr = "JAL";
 			isBranch = true;
 			Reg_address = 0x31;
 		}
@@ -180,7 +181,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			address = (instruction << 6);
 			address = (address >> 6);
 			isHalt = true;
-			inststr = "halt";
+			inststr = "HALT";
 		}
 		//I-TYPE
 		else{
@@ -190,7 +191,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			rt = (rt >> 27);
 			immediate = (instruction << 16);
 			immediate = (immediate >> 16);
-			if(op != 0x2B || op != 0x29 || op != 0x28 || op != 0x04 || op != 0x05 || op != 0x07) Reg_address = rt;
+			if(op != 0x2B && op != 0x29 && op != 0x28 && op != 0x04 && op != 0x05 && op != 0x07) Reg_address = rt;
 
 			//stall by conditional branch data hazard
 			if(op == 0x04 || op == 0x05 || op == 0x07){
@@ -209,11 +210,13 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			if(rs == dwb.Reg_address && op != 0x0F){
 				isNextNOP = true;
 				isStall = true;
+				printf("stall 2 rs\n");
 			}
 			//only save beq bne need to read rt
 			if(rt == dwb.Reg_address && (op == 0x2B || op == 0x29 || op == 0x28 || op == 0x04 || op == 0x05) ){
 				isNextNOP = true;
 				isStall = true;
+				printf("stall 2 rt\n");
 			}
 
 			//stall by load memory
@@ -261,75 +264,75 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 
 			//addi
 			if(op == 0x08){
-				inststr = "addi";
+				inststr = "ADDI";
 			}
 			//addiu
 			else if(op == 0x09){
-				inststr = "addiu";
+				inststr = "ADDIU";
 			}
 			//lw
 			else if(op == 0x23){
-				inststr = "lw";
+				inststr = "LW";
 			}
 			//lh
 			else if(op == 0x21){
-				inststr = "lh";
+				inststr = "LH";
 			}
 			//lhu
 			else if(op == 0x25){
-				inststr = "lhu";
+				inststr = "LHU";
 			}
 			//lb
 			else if(op == 0x20){
-				inststr = "lb";
+				inststr = "LB";
 			}
 			//lbu
 			else if(op == 0x24){
-				inststr = "lbu";
+				inststr = "LBU";
 			}
 			//sw
 			else if(op == 0x2B){
-				inststr = "sw";
+				inststr = "SW";
 			}
 			//sh
 			else if(op == 0x29){
-				inststr = "sh";
+				inststr = "SH";
 			}
 			//sb
 			else if(op == 0x28){
-				inststr = "sb";
+				inststr = "SB";
 			}
 			//lui
 			else if(op == 0x0F){
-				inststr = "lui";
+				inststr = "LUI";
 			}
 			//andi
 			else if(op == 0x0C){
-				inststr = "andi";
+				inststr = "ANDI";
 			}
 			//ori
 			else if(op == 0x0D){
-				inststr = "ori";
+				inststr = "ORI";
 			}
 			//nori
 			else if(op == 0x0E){
-				inststr = "nori";
+				inststr = "NORI";
 			}
 			//slti
 			else if(op == 0x0A){
-				inststr = "slti";
+				inststr = "SLTI";
 			}
 			//beq
 			else if(op == 0x04){
-				inststr = "beq";
+				inststr = "BEQ";
 			}
 			//bne
 			else if(op == 0x05){
-				inststr = "bne";
+				inststr = "BNE";
 			}
 			//bgtz
 			else if(op == 0x07){
-				inststr = "bgtz";
+				inststr = "BGTZ";
 			}
 		}
 	}

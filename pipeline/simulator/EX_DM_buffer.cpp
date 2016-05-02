@@ -31,4 +31,15 @@ void EX_DM_buffer::getFromEXStage(EX_stage exs){
 		inststr = exs.inststr;
 		PC = exs.PC;
 	}
+	else{
+		Reg_value = 0;
+		Reg_address = 0;
+		for(int i = 0 ; i < 4 ; i++){
+			Data_value[i] = 0;
+		}
+		Data_address = 0;
+		op = 0;
+		inststr = 0;
+		PC = 0;
+	}
 }

@@ -13,7 +13,9 @@ IF_ID_buffer::IF_ID_buffer(){
 
 void IF_ID_buffer::getFromIFStage(IF_stage ifs){
 
-	isNOP = ifs.isNextNOP;
+	if(ifs.isStall == false){
+		instructionBuffer = ifs.instruction;
+	}
+    isNOP = ifs.isNextNOP;
     isHalt = ifs.isHalt;
-	instructionBuffer = ifs.instruction;
 }

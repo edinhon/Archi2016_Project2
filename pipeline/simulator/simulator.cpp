@@ -62,6 +62,7 @@ void simulator::runPipeline(){
 		ieb.getFromIDStage(ids);
 		ifs.readInstruction(&PC, inst.I_memory, ieb);
 		iib.getFromIFStage(ifs);
+		iib.PC = PC;
 
 		if(exs.error != 0){
 			if(exs.error[0]){

@@ -8,6 +8,7 @@
 
 using namespace std;
 
+class IF_ID_buffer;
 class ID_EX_buffer;
 
 class IF_stage{

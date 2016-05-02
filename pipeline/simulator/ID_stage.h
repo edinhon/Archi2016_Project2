@@ -30,6 +30,7 @@ public:
 	int Rs, Rt, Rd;
 	unsigned int Reg_address;
 	unsigned int PC;
+	unsigned int instruction;
 	string inststr;
 	bool isBranch = false;
 	bool isNOP = true;

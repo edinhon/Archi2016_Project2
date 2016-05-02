@@ -13,11 +13,21 @@ DM_WB_buffer::DM_WB_buffer(){
 }
 
 void DM_WB_buffer::getFromDMStage(DM_stage dms){
-	Reg_value = dms.Reg_value;
-	Reg_address = dms.Reg_address;
-	op = dms.op;
-	PC = dms.PC;
-	inststr = dms.inststr;
 	isNOP = dms.isNOP;
 	isHalt = dms.isHalt;
+	if(!isNOP){
+		Reg_value = dms.Reg_value;
+		Reg_address = dms.Reg_address;
+		op = dms.op;
+		PC = dms.PC;
+		inststr = dms.inststr;
+	}
+	else{
+		Reg_value = 0;
+		Reg_address = 0;
+		op = 0;
+		PC = 0;
+		inststr = 0;
+	}
+	
 }
