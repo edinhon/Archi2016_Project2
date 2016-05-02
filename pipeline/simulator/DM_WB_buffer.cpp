@@ -24,10 +24,10 @@ void DM_WB_buffer::getFromDMStage(DM_stage dms){
 	}
 	else{
 		Reg_value = 0;
-		Reg_address = 0;
+		Reg_address = -1;
 		op = 0;
 		PC = 0;
-		inststr = 0;
+		inststr = "";
 	}
-	
+
 }

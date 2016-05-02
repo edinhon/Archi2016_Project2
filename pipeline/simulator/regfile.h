@@ -13,6 +13,7 @@ public:
 	void printRegister(FILE *snap);
 
     int Register[32] = {0};
+	int oldRegister[32] = {0};
 
 };
 

@@ -33,13 +33,13 @@ void EX_DM_buffer::getFromEXStage(EX_stage exs){
 	}
 	else{
 		Reg_value = 0;
-		Reg_address = 0;
+		Reg_address = -1;
 		for(int i = 0 ; i < 4 ; i++){
 			Data_value[i] = 0;
 		}
-		Data_address = 0;
+		Data_address = -1;
 		op = 0;
-		inststr = 0;
+		inststr = "";
 		PC = 0;
 	}
 }
