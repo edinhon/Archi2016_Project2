@@ -133,11 +133,11 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			}
 			//xor
 			else if(funct == 0x26){
-				inststr = "xor";
+				inststr = "XOR";
 			}
 			//nor
 			else if(funct == 0x27){
-				inststr = "nor";
+				inststr = "NOR";
 			}
 			//nand
 			else if(funct == 0x28){

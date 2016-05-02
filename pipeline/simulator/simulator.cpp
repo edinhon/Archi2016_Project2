@@ -48,6 +48,7 @@ void simulator::runPipeline(){
 	printStage();
 	i++;*/
 	ifs.newPC = PC;
+	reg.oldRegister[29] = reg.Register[29];
 
 	while( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3] && i < 300){
 

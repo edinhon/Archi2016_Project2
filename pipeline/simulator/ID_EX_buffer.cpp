@@ -26,7 +26,7 @@ void ID_EX_buffer::getFromIDStage(ID_stage ids){
 	op = ids.op;
 	rs = ids.rs;
 	rt = ids.rt;
-	rd = ids.op;
+	rd = ids.rd;
 	shamt = ids.shamt;
 	funct = ids.funct;
 	address = ids.address;
