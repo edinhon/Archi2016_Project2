@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <String>
+#include <string>
 #include "ID_EX_buffer.h"
 #include "EX_DM_buffer.h"
 #include "EX_stage.h"
