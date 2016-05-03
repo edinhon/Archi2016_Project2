@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdio>
 #include <cstdlib>
-#include <String>
+#include <string>
 #include "ID_stage.h"
 #include "IF_ID_buffer.h"
 #include "ID_EX_buffer.h"
