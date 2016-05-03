@@ -4,7 +4,7 @@
 #include<iostream>
 #include<cstdio>
 #include<cstdlib>
-#include <String>
+#include <string>
 #include "IF_stage.h"
 #include "ID_stage.h"
 #include "EX_stage.h"
