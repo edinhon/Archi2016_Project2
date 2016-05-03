@@ -94,6 +94,9 @@ void simulator::runPipeline(){
     fprintf(snap, "PC: 0x%0.8X\n", PC*4);
     printStage(snap, ifs, ids, exs, dms, wbs);
 
+	fclose(snap);
+	fclose(dump);
+	return ;
 }
 
 void simulator::printStage(FILE *snap, IF_stage ifs, ID_stage ids, EX_stage exs, DM_stage dms, WB_stage wbs){
