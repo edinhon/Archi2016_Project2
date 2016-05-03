@@ -38,6 +38,7 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 	isrsForwarding = false;
 	isrtForwarding = false;
 	Reg_address = -1;
+	error4 = false;
 
 	if(!isNOP && !isHalt){
 		op = (instruction >> 26);
@@ -261,6 +262,14 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 
 			//beq
 			if(op == 0x04){
+				//error "Number Overflow"
+				if(PC*4 > 0 && immediate*4 > 0 && (PC*4 + immediate*4) <= 0){
+					error4 = true;
+				}
+				else if(PC*4 < 0 && immediate*4 < 0 && (PC*4 + immediate*4) >= 0){
+					error4 = true;
+				}
+				
 				if(Rs == Rt) {
 					PC += (1 + immediate);
 					isBranch = true;
@@ -268,6 +277,14 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			}
 			//bne
 			else if(op == 0x05){
+				//error "Number Overflow"
+				if(PC*4 > 0 && immediate*4 > 0 && (PC*4 + immediate*4) <= 0){
+					error4 = true;
+				}
+				else if(PC*4 < 0 && immediate*4 < 0 && (PC*4 + immediate*4) >= 0){
+					error4 = true;
+				}
+				
 				if(Rs != Rt) {
 					PC += (1 + immediate);
 					isBranch = true;
@@ -275,6 +292,14 @@ void ID_stage::decode(int Register[], IF_ID_buffer iib, ID_EX_buffer ieb, EX_DM_
 			}
 			//bgtz
 			else if(op == 0x07){
+				//error "Number Overflow"
+				if(PC*4 > 0 && immediate*4 > 0 && (PC*4 + immediate*4) <= 0){
+					error4 = true;
+				}
+				else if(PC*4 < 0 && immediate*4 < 0 && (PC*4 + immediate*4) >= 0){
+					error4 = true;
+				}
+				
 				if(Rs > 0) {
 					PC += (1 + immediate);
 					isBranch = true;

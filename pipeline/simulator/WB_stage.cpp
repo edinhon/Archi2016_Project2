@@ -15,8 +15,12 @@ void WB_stage::writeToRegister(DM_WB_buffer dwb, int Register[]){
 	inststr = dwb.inststr;
 	isNOP = dwb.isNOP;
 	isHalt = dwb.isHalt;
+	error1 = false;
+	
+	//error "Write to register $0"
+	if(dwb.Reg_address == 0x00) error1 = true;
 
-	if(!isNOP && !isHalt && dwb.Reg_address != 0x00){
+	if(!isNOP && !isHalt && !error1){
 		//R-TYPE
 		if(op == 0x00){
 			Register[dwb.Reg_address] = dwb.Reg_value;

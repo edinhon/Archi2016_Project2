@@ -20,37 +20,37 @@ public:
 	void implement(ID_EX_buffer ieb, EX_DM_buffer edb);
 
 	//R-TYPE
-    void add (unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void addu(unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void sub (unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void andf(unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void orf (unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void xorf(unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void nor (unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void nand(unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void slt (unsigned int Rs, unsigned int Rt, unsigned int rd);
-    void sll (unsigned int Rt, unsigned int rd, unsigned int shamt, unsigned int rt);
-    void srl (unsigned int Rt, unsigned int rd, unsigned int shamt);
-    void sra (unsigned int Rt, unsigned int rd, unsigned int shamt);
+    void add (int Rs, int Rt, unsigned int rd);
+    void addu(int Rs, int Rt, unsigned int rd);
+    void sub (int Rs, int Rt, unsigned int rd);
+    void andf(int Rs, int Rt, unsigned int rd);
+    void orf (int Rs, int Rt, unsigned int rd);
+    void xorf(int Rs, int Rt, unsigned int rd);
+    void nor (int Rs, int Rt, unsigned int rd);
+    void nand(int Rs, int Rt, unsigned int rd);
+    void slt (int Rs, int Rt, unsigned int rd);
+    void sll (int Rt, unsigned int rd, unsigned int shamt, unsigned int rt);
+    void srl (int Rt, unsigned int rd, unsigned int shamt);
+    void sra (int Rt, unsigned int rd, unsigned int shamt);
 	//I-TYPE
-    void addi (unsigned int Rs, unsigned int rt,  int immediate);
-    void addiu(unsigned int Rs, unsigned int rt,  int immediate);
-    void lw   (unsigned int Rs, unsigned int rt,  int immediate);
-    void lh   (unsigned int Rs, unsigned int rt,  int immediate);
-    void lhu  (unsigned int Rs, unsigned int rt,  int immediate);
-    void lb   (unsigned int Rs, unsigned int rt,  int immediate);
-    void lbu  (unsigned int Rs, unsigned int rt,  int immediate);
-    void sw   (unsigned int Rs, unsigned int Rt,  int immediate);
-    void sh   (unsigned int Rs, unsigned int Rt,  int immediate);
-    void sb   (unsigned int Rs, unsigned int Rt,  int immediate);
+    void addi (int Rs, unsigned int rt,  int immediate);
+    void addiu(int Rs, unsigned int rt,  int immediate);
+    void lw   (int Rs, unsigned int rt,  int immediate);
+    void lh   (int Rs, unsigned int rt,  int immediate);
+    void lhu  (int Rs, unsigned int rt,  int immediate);
+    void lb   (int Rs, unsigned int rt,  int immediate);
+    void lbu  (int Rs, unsigned int rt,  int immediate);
+    void sw   (int Rs, int Rt,  int immediate);
+    void sh   (int Rs, int Rt,  int immediate);
+    void sb   (int Rs, int Rt,  int immediate);
     void lui  (unsigned int rt,  int immediate);
-    void andi (unsigned int Rs, unsigned int rt,  int immediate);
-    void ori  (unsigned int Rs, unsigned int rt,  int immediate);
-    void nori (unsigned int Rs, unsigned int rt,  int immediate);
-    void slti (unsigned int Rs, unsigned int rt,  int immediate);
-    /*void beq  (unsigned int Rs, unsigned int Rt,  int immediate);
-    void bne  (unsigned int Rs, unsigned int Rt,  int immediate);
-    void bgtz (unsigned int Rs,  int immediate);*/
+    void andi (int Rs, unsigned int rt,  int immediate);
+    void ori  (int Rs, unsigned int rt,  int immediate);
+    void nori (int Rs, unsigned int rt,  int immediate);
+    void slti (int Rs, unsigned int rt,  int immediate);
+    /*void beq  (int Rs, int Rt,  int immediate);
+    void bne  (int Rs, int Rt,  int immediate);
+    void bgtz (int Rs,  int immediate);*/
 	//J-TYPE
 	void jal  ();
 
@@ -60,7 +60,7 @@ public:
 	unsigned int Reg_address, Data_address;
 	unsigned int op;
 	string inststr;
-	bool error[4] = {0};
+	bool error4 = false;
 	bool isNOP = true;
 	bool isHalt = false;
 	bool isrsForwarding = false, isrtForwarding = false;

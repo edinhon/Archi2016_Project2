@@ -15,7 +15,7 @@ EX_DM_buffer::EX_DM_buffer(){
 	for(int i = 0 ; i < 4 ; i++){
         Data_value[i] = 0;
 	}
-	Data_address = 0;
+	Data_address = -1;
 	op = 0;
 	oldop = 0;
 }

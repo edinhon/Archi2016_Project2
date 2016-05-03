@@ -21,6 +21,7 @@ public:
 	unsigned int op;
 	string inststr;
 	bool isNOP = true, isHalt = false;
+	bool error1 = false;
 };
 
 #endif//LAB2_WB_STAGE_H

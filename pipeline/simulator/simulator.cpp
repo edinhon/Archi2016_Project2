@@ -65,21 +65,20 @@ void simulator::runPipeline(){
 		iib.getFromIFStage(ifs);
 		iib.PC = PC;
 
-		if(exs.error != 0){
-			if(exs.error[0]){
-				exs.error[0] = false;
-				fprintf(dump,  "In cycle %d: Write $0 Error\n", i);
-			}
-			if(exs.error[2]){
-				fprintf(dump, "In cycle %d: Address Overflow\n", i);
-			}if(exs.error[3]){
-				fprintf(dump, "In cycle %d: Misalignment Error\n", i);
-			}if(exs.error[1]){
-				exs.error[1] = false;
-				fprintf(dump, "In cycle %d: Number Overflow\n", i);
-			}
+		if(wbs.error1){
+			wbs.error1 = false;
+			fprintf(dump,  "In cycle %d: Write $0 Error\n", i+1);
+		}if(dms.error2){
+			fprintf(dump, "In cycle %d: Address Overflow\n", i+1);
+		}if(dms.error3){
+			fprintf(dump, "In cycle %d: Misalignment Error\n", i+1);
+		}if(exs.error4 || ids.error4){
+			exs.error4 = false;
+			ids.error4 = false;
+			fprintf(dump, "In cycle %d: Number Overflow\n", i+1);
 		}
-		if( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3]){
+		
+		if( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !dms.error2 && !dms.error3){
 			fprintf(snap, "cycle %d\n", i);
 			reg.printRegister(snap);
 			fprintf(snap, "PC: 0x%0.8X\n", PC*4);

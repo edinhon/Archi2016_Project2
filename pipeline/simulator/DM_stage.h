@@ -25,6 +25,7 @@ public:
 	unsigned int op;
 	string inststr;
 	bool isNOP = true, isHalt = false;
+	bool error2 = false, error3 = false;
 };
 
 #endif //LAB2_DM_STAGE_H

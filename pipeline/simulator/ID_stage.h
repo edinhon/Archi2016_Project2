@@ -38,6 +38,7 @@ public:
 	bool isStall = false;
 	bool isHalt = false;
 	bool isrsForwarding = false, isrtForwarding = false;
+	bool error4 = false;
 };
 
 #endif //LAB2_ID_STAGE_H
