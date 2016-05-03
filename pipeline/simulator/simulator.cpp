@@ -50,7 +50,7 @@ void simulator::runPipeline(){
 	ifs.newPC = PC;
 	reg.oldRegister[29] = reg.Register[29];
 
-	while( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !exs.error[2] && !exs.error[3] && i < 300){
+	while( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !dms.error2 && !dms.error3 && i < 300){
 
 		oldPC = PC;
 
@@ -77,7 +77,7 @@ void simulator::runPipeline(){
 			ids.error4 = false;
 			fprintf(dump, "In cycle %d: Number Overflow\n", i+1);
 		}
-		
+
 		if( (!ifs.isHalt || !ids.isHalt || !exs.isHalt || !dms.isHalt || !wbs.isHalt) && !dms.error2 && !dms.error3){
 			fprintf(snap, "cycle %d\n", i);
 			reg.printRegister(snap);

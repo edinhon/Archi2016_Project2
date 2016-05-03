@@ -17,7 +17,6 @@ void EX_stage::implement(ID_EX_buffer ieb, EX_DM_buffer edb){
 	Reg_address = ieb.Reg_address;
 	for(int i = 0 ; i < 4 ; i++){
         Data_value[i] = 0;
-		error[i] = false;
 	}
 	Data_address = 0;
 	inststr = ieb.inststr;
@@ -377,6 +376,7 @@ void EX_stage::add (int Rs, int Rt, unsigned int rd){
 		error4 = true;
 	}
 	{
+		printf("%d %d\n", Rs, Rt);
 		Reg_value = Rs + Rt;
 		Reg_address = rd;
 	}

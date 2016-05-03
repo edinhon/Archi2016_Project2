@@ -8,7 +8,7 @@ using namespace std;
 
 DM_WB_buffer::DM_WB_buffer(){
 	Reg_value = 0;
-	Reg_address = 0;
+	Reg_address = -1;
 	op = 0;
 }
 
