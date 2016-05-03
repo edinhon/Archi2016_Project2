@@ -7,4 +7,6 @@ int main(){
 	
 	simulator sim;
 	sim.runPipeline();
+	
+	return 0;
 }
